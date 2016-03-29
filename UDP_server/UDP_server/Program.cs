@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace UDP_server
 		{
 			ProcessStartInfo psi = new ProcessStartInfo
 			{
-				FileName = "/tmp/bash.sh",
+				FileName = "/Desktop/bash.sh",
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
 				Arguments = arg

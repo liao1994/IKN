@@ -3,3 +3,8 @@
 /home/ikn/UDP_server/UDP_server/bin/Debug/UDP_server.exe
 /home/ikn/UDP_server/UDP_server/obj/x86/Debug/UDP_server.exe
 /home/ikn/UDP_server/UDP_server/obj/x86/Debug/UDP_server.exe.mdb
+/home/ikn/Desktop/IKN/UDP_server/UDP_server/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/ikn/Desktop/IKN/UDP_server/UDP_server/bin/Debug/UDP_server.exe.mdb
+/home/ikn/Desktop/IKN/UDP_server/UDP_server/bin/Debug/UDP_server.exe
+/home/ikn/Desktop/IKN/UDP_server/UDP_server/obj/x86/Debug/UDP_server.exe
+/home/ikn/Desktop/IKN/UDP_server/UDP_server/obj/x86/Debug/UDP_server.exe.mdb
