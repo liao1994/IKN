@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO; 
 
 namespace TestProject
 {
@@ -8,15 +9,22 @@ namespace TestProject
 	{
 		static void Main()
 		{
-			ProcessStartInfo psi = new ProcessStartInfo();
-			psi.FileName = "/bin/bash/";
-			psi.UseShellExecute = false;
-			psi.RedirectStandardOutput = true;
+			Process proc = new Process {
+				StartInfo = new ProcessStartInfo {
+					FileName = @"/root/Desktop/exo-terminal-emulator.desktop",
+					Arguments = "echo bla",
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+					CreateNoWindow = false
+				}
+			};
+			proc.Start();
+			StreamReader reader = proc.StandardOutput;
+			string result = reader.ReadToEnd ();
+			Console.Write (result);
+			string strOutput = proc.StandardOutput.ReadToEnd();
+			proc.WaitForExit();
 
-			psi.Arguments = "test";
-			Process p = Process.Start(psi);
-			string strOutput = p.StandardOutput.ReadToEnd();
-			p.WaitForExit();
 			Console.WriteLine(strOutput);
 		}
 	}
