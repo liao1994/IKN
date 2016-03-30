@@ -15,60 +15,45 @@ namespace UDP_server
 	{
 		static void Main(string[] args)
 		{
-			var data = new byte[1000];
+			var bytesToClient = new byte[1000];
 			// lytter til alle IP adresser i port 9000
 			var endpoint = new IPEndPoint(IPAddress.Any,9000);
-			// storing connect from client 
-			var newSocket = new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
-			//bind inc connection to the socket
-			newSocket.Bind(endpoint);
-			Console.WriteLine("Waiting for client...");
+			var UdpSocket = new UdpClient (endpoint);
+			Console.WriteLine ("Waiting for client...");
+			var running = true;
+			while (running) {
 
-			//waiting for connection  from any IP on port 9000
-			var sender = new IPEndPoint(IPAddress.Any, 9000);
-			//stores connection to tmpRemote
-			var tmpRemote = (EndPoint) sender;
-			Console.WriteLine ("connection found..");
-			// the stored data in data and size in recv
-			var recv = newSocket.ReceiveFrom(data, ref tmpRemote);
+				//venter på bytes fra vores socket via den endpoint
+				var recvBytes = UdpSocket.Receive (ref endpoint); 
 
-			Console.WriteLine("message received from" + tmpRemote);
-			//convert the byte array into string
-			var datafromClient = Encoding.ASCII.GetString(data, 0, recv);
-			Console.WriteLine(datafromClient);
-			string responseToClient;
-			switch (datafromClient)
-			{
-			case "U":
-				responseToClient = File.ReadAllText (@"/proc/uptime");
+				var strFromClient = Encoding.ASCII.GetString (recvBytes);
+				//var recv = newSocket.ReceiveFrom(data, ref tmpRemote);
+				Console.WriteLine ("A connection found");
+				Console.WriteLine(strFromClient);
+
+				//convert the byte array into string
+				//var datafromClient = Encoding.ASCII.GetString(data, 0, recv);
+				string responseToClient = "havn't recieved anything yet";
+				switch (strFromClient) {
+				case "U":
+					responseToClient = File.ReadAllText (@"/proc/uptime");
 				//use /proc/uptime
-				break;
-			case "L":
-				responseToClient = File.ReadAllText (@"/proc/loadavg");
+					break;
+				case "L":
+					responseToClient = File.ReadAllText (@"/proc/loadavg");
 				// use /proc/loadavg
-				break;
-			default:
+					break;
+				default:
+					Console.WriteLine ("client choose to close line..");
+					running = false; 
 				// dunno what to do
-				break;
-			}
-			data = Encoding.ASCII.GetBytes(responseToClient);
-
-			if (newSocket.Connected)
-				newSocket.Send(data);
-			while (true)
-			{
-				if (!newSocket.Connected)
-				{
-					Console.WriteLine("Client disconnected");
 					break;
 				}
-				data = new byte[1000];
-				recv = newSocket.ReceiveFrom(data, ref tmpRemote);
-				if (recv == 0)
-					break;
-				Console.WriteLine(Encoding.ASCII.GetString(data,0,recv));
+				bytesToClient = Encoding.ASCII.GetBytes (responseToClient);
+				UdpSocket.Send (bytesToClient, responseToClient.Length, endpoint);
 			}
-			newSocket.Close();
+
+			UdpSocket.Close();
 		}
 	}
 }
