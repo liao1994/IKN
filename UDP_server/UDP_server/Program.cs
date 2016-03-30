@@ -11,24 +11,6 @@ using System.Runtime.Remoting.Channels;
 
 namespace UDP_server
 {
-	class Runnshell
-	{
-		public Runnshell(string arg)
-		{
-			ProcessStartInfo psi = new ProcessStartInfo
-			{
-				FileName = "/Desktop/bash.sh",
-				UseShellExecute = false,
-				RedirectStandardOutput = true,
-				Arguments = arg
-			};
-
-			Process p = Process.Start(psi);
-			string strOutput = p.StandardOutput.ReadToEnd();
-			p.WaitForExit();
-			Console.WriteLine(strOutput);
-		}
-	}
 	class Program
 	{
 		static void Main(string[] args)
@@ -40,13 +22,13 @@ namespace UDP_server
 			var newSocket = new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
 			//bind inc connection to the socket
 			newSocket.Bind(endpoint);
-			Console.WriteLine("Waiting for client");
+			Console.WriteLine("Waiting for client...");
 
 			//waiting for connection  from any IP on port 9000
 			var sender = new IPEndPoint(IPAddress.Any, 9000);
 			//stores connection to tmpRemote
 			var tmpRemote = (EndPoint) sender;
-
+			Console.WriteLine ("connection found..");
 			// the stored data in data and size in recv
 			var recv = newSocket.ReceiveFrom(data, ref tmpRemote);
 
@@ -54,23 +36,22 @@ namespace UDP_server
 			//convert the byte array into string
 			var datafromClient = Encoding.ASCII.GetString(data, 0, recv);
 			Console.WriteLine(datafromClient);
-			Runnshell rs;
+			string responseToClient;
 			switch (datafromClient)
 			{
 			case "U":
-				rs = new Runnshell("proc/uptime");
+				responseToClient = File.ReadAllText (@"/proc/uptime");
 				//use /proc/uptime
 				break;
 			case "L":
-				rs = new Runnshell("proc/loadavg");
+				responseToClient = File.ReadAllText (@"/proc/loadavg");
 				// use /proc/loadavg
 				break;
 			default:
 				// dunno what to do
 				break;
 			}
-			string welcome = "welcome to my super server!, which is not copy/pasted";
-			data = Encoding.ASCII.GetBytes(welcome);
+			data = Encoding.ASCII.GetBytes(responseToClient);
 
 			if (newSocket.Connected)
 				newSocket.Send(data);
