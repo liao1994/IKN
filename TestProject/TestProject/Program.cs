@@ -7,25 +7,22 @@ namespace TestProject
 
 	class Runshell
 	{
-		static void Main()
-		{
-			Process proc = new Process {
-				StartInfo = new ProcessStartInfo {
-					FileName = @"/root/Desktop/exo-terminal-emulator.desktop",
-					Arguments = "echo bla",
-					UseShellExecute = false,
-					RedirectStandardOutput = true,
-					CreateNoWindow = false
-				}
-			};
-			proc.Start();
-			StreamReader reader = proc.StandardOutput;
-			string result = reader.ReadToEnd ();
-			Console.Write (result);
-			string strOutput = proc.StandardOutput.ReadToEnd();
-			proc.WaitForExit();
-
-			Console.WriteLine(strOutput);
-		}
+        public TimeSpan UpTime
+        {
+            get
+            {
+                using (var uptime = new PerformanceCounter("System", "System Up Time"))
+                {
+                    uptime.NextValue();       //Call this an extra time before reading its value
+                    return TimeSpan.FromSeconds(uptime.NextValue());
+                }
+            }
+        }
+        static void Main()
+        {
+            int ticks = System.Environment.TickCount/1000;
+            Console.WriteLine(ticks);
+            Console.ReadKey();
+        }
 	}
 }

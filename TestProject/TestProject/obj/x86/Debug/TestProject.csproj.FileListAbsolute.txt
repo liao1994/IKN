@@ -1,0 +1,5 @@
+D:\uni Docs\I4IKN\IKN\TestProject\TestProject\obj\x86\Debug\TestProject.exe
+D:\uni Docs\I4IKN\IKN\TestProject\TestProject\bin\Debug\TestProject.exe
+D:\uni Docs\I4IKN\IKN\TestProject\TestProject\bin\Debug\TestProject.pdb
+D:\uni Docs\I4IKN\IKN\TestProject\TestProject\obj\x86\Debug\TestProject.csprojResolveAssemblyReference.cache
+D:\uni Docs\I4IKN\IKN\TestProject\TestProject\obj\x86\Debug\TestProject.pdb
