@@ -33,27 +33,20 @@ namespace UDP_client
 					str = "U";
 				}
 				//proc/uptime
+
 				if (cki.Key == ConsoleKey.L)
+				{
 					packetData = Encoding.ASCII.GetBytes("L");
-				str = "L";
+					str = "L";
+				}
 				//proc/loadavg
 				udpclient.Send(packetData,str.Length);
-				//client.SendTo(packetData, ep);
-				//var ep2 = new IPEndPoint(IPAddress.Any,9000);
+
 				var recv = udpclient.Receive(ref ep);
 				var s2 = Encoding.ASCII.GetString(recv);
 				Console.WriteLine(s2);
-				//	var s = (EndPoint) ep; 
-			//client.Receive(bytesFromServer);
+			
 
-				//Console.WriteLine()
-			//	var recv = client.ReceiveFrom(bytesFromServer,ref ep);
-	//			returnData = Encoding.ASCII.GetString(bytesFromServer,0,recv);
-	//			Console.WriteLine(returnData);
-				//udpclient.Receive(ref ep); 
-				//client.Receive(bytesFromServer);
-				//returnData = Encoding.ASCII.GetString(bytesFromServer);
-				//Console.WriteLine (returnData);
 					
 			} while (cki.Key != ConsoleKey.Q && cki.Key != ConsoleKey.Escape);
 			udpclient.Close ();
