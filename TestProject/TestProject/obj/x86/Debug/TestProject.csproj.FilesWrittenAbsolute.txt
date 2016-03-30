@@ -3,3 +3,8 @@
 /home/ikn/TestProject/TestProject/bin/Debug/TestProject.exe
 /home/ikn/TestProject/TestProject/obj/x86/Debug/TestProject.exe
 /home/ikn/TestProject/TestProject/obj/x86/Debug/TestProject.exe.mdb
+/root/Desktop/IKN/TestProject/TestProject/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/root/Desktop/IKN/TestProject/TestProject/bin/Debug/TestProject.exe.mdb
+/root/Desktop/IKN/TestProject/TestProject/bin/Debug/TestProject.exe
+/root/Desktop/IKN/TestProject/TestProject/obj/x86/Debug/TestProject.exe
+/root/Desktop/IKN/TestProject/TestProject/obj/x86/Debug/TestProject.exe.mdb

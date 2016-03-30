@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO; 
 
 namespace TestProject
 {
 
-	class Runshell
+	public class Program
 	{
 		static void Main()
 		{
-			ProcessStartInfo psi = new ProcessStartInfo();
-			psi.FileName = "/bin/bash/";
-			psi.UseShellExecute = false;
-			psi.RedirectStandardOutput = true;
-
-			psi.Arguments = "test";
-			Process p = Process.Start(psi);
-			string strOutput = p.StandardOutput.ReadToEnd();
-			p.WaitForExit();
-			Console.WriteLine(strOutput);
+			var uptimetext1 = File.ReadAllText (@"/proc/uptime"); 
+			Console.WriteLine (uptimetext1);
+			var uptimetext2 = File.ReadAllText (@"/proc/loadavg"); 
+			Console.WriteLine (uptimetext2);
+			Console.ReadKey ();
 		}
 	}
 }
