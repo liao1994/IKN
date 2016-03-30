@@ -2,16 +2,9 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="TestProject/Program.cs">
     <Files>
-      <File FileName="TestProject/Program.cs" Line="14" Column="14" />
-      <File FileName="TestProject/scrip.sh" Line="5" Column="5" />
+      <File FileName="TestProject/Program.cs" Line="22" Column="22" />
+      <File FileName="TestProject/scrip.sh" Line="1" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>strOutput</Value>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

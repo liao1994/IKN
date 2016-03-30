@@ -1,9 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="UDP_server/testfield.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="UDP_server/Program.cs">
     <Files>
-      <File FileName="UDP_server/Program.cs" Line="20" Column="20" />
-      <File FileName="UDP_server/testfield.cs" Line="1" Column="1" />
+      <File FileName="UDP_server/Program.cs" Line="2" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
