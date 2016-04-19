@@ -19,6 +19,12 @@ namespace Application
 		private file_server ()
 		{
 			// TO DO Your own code
+			Transport t;
+			var buf = new byte[BUFSIZE];
+			buf [0] = 'A';
+			buf [1] = 'B';
+			buf [2] = 'C';
+			t.send (buf, buf.GetLength);
 		}
 
 		/// <summary>
