@@ -103,6 +103,7 @@ namespace Linklaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
+            Array.Copy(buf, 0, buffer, 1, buf.Length);
             // TO DO Your own code
             List<byte> listofbytes = new List<byte>();
 		    if (buf[0] == END && buf[buf.Length] == END)
@@ -123,12 +124,17 @@ namespace Linklaget
                     
                 }
             }
-		    var myByte = new byte[listofbytes.Count];
-		    for (int i = 1; i < buf.Length; i++)
+		    if (listofbytes.Count != 0)
 		    {
-		        myByte[i] = listofbytes[i];
+                var myByte = new byte[listofbytes.Count];
+                for (int i = 1; i < buf.Length; i++)
+                {
+                    myByte[i] = listofbytes[i];
+                }
+                buf = myByte;
+		        return listofbytes.Count;
 		    }
-		    buf = myByte;
+
             return 0; 
 		}
 	}
