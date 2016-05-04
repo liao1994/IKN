@@ -34,6 +34,7 @@ namespace Application
             buf[1] = Convert.ToByte('B');
             buf[2] = Convert.ToByte('C');
             t.send(buf, buf.Length);
+            
         }
 
 		/// <summary>

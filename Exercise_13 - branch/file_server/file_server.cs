@@ -19,6 +19,9 @@ namespace Application
 		private file_server ()
 		{
 			// TO DO Your own code
+			
+
+      
             //Test Application in virtual machine #2 (acts only as receiver for testing Link Layer)
             Transport transport = new Transport(BUFSIZE);
             byte[] rxBytes = new byte[BUFSIZE];
@@ -27,8 +30,7 @@ namespace Application
             {
                 Console.WriteLine(rxBytes[x]);
             }
-		    Console.ReadKey();
-		}
+        }
 
 		/// <summary>
 		/// Sends the file.

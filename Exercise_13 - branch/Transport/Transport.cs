@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Linklaget;
 
 /// <summary>
@@ -102,48 +103,43 @@ namespace Transportlaget
 		/// </param>
 		public void send(byte[] buf, int size)
 		{
-            Array.Copy(buf,0,buffer,4,size);
-		    do
-		    {
-		        buffer[2] = seqNo;
-		        buffer[3] = (byte) TransType.DATA;
-                checksum.calcChecksum(ref buffer, size+(int)TransSize.ACKSIZE);
-		        if (++errorCount == 4)
-		        {
-		            buffer[0]++;
-                    //error
-		        }
-                link.send(buffer, buffer.Length);
-		    } while (!receiveAck());
-		    old_seqNo = DEFAULT_SEQNO;
-            #region old code
-            /*var checksumbyteheader = buf;
-		    int bytesSent = 0; 
-		    int bytesLeft = size;
-		    int seq = 0;
+		    var checksumbyteheader = buf;
+		    int bytesSent = 0;
+		    byte seqnumber = 0;
+		    byte type = 0; 
+            int bytesLeft = size;
+
             while (bytesLeft > 0)
             {
                 int nextPacketSize = (bytesLeft > 1000) ? 1000 : bytesLeft;
-                //io.Write(data, bytesSent, nextPacketSize);
-                //checksum.calcChecksum();
-                bytesLeft -= nextPacketSize;
-                buffer[0] = checksumbyteheader[0];
-                buffer[1] = checksumbyteheader[1];
-                buffer[2] = (byte)seq++;
-                buffer[3] = (byte) 0;
+                var buffer= new byte[nextPacketSize];
                 for (int i = 0; i < nextPacketSize; i++)
                 {
-                    buffer[i + 4 + bytesSent] = buf[bytesSent];
-                    bytesSent++;
+                    buffer[i] = buf[bytesSent + i];
+
                 }
-                link.send(buffer, buffer.Length);
-
-                //now i need to recieve ack
-                var n = link.receive(ref buf);
-
-            }*/
-#endregion
-        }
+                var buf2 = buffer;
+                checksum.calcChecksum(ref buffer,nextPacketSize);
+                byte[] sendingThis = new byte[nextPacketSize+4];
+                sendingThis[0] = buffer[0];
+                sendingThis[1] = buffer[1];
+                sendingThis[2] = seqnumber;
+                sendingThis[3] = type;
+                for (int i = 0; i < nextPacketSize; i++)
+                {
+                    sendingThis[i + 4] = buf2[i];
+                }
+                bytesSent += nextPacketSize;
+                bytesLeft -= nextPacketSize;
+                seqnumber++;
+                link.send(sendingThis, nextPacketSize);
+                // wait for acknowledge
+                while (!receiveAck())
+                {
+                    link.send(sendingThis, nextPacketSize);
+                }
+            }
+		}
 
 		/// <summary>
 		/// Receive the specified buffer.
@@ -152,17 +148,8 @@ namespace Transportlaget
 		/// Buffer.
 		/// </param>
 		public int receive (ref byte[] buf)
-		{
-		    var recvOk = false;
-
-		    while (!recvOk)
-		    {
-		        var recvSize = link.receive(ref buffer);
-		        if (recvSize <= 0) continue;
-		        recvOk = checksum.checkChecksum(buffer, recvSize);
-		        sendAck(recvOk);
-		    }
-		    return 0; 
+		
+            sendAck();
 		}
 	}
 

@@ -129,7 +129,7 @@ namespace Linklaget
 		        myByte[i] = listofbytes[i];
 		    }
 		    buf = myByte;
-            return 0; 
+            return buf.Length; 
 		}
 	}
 }
