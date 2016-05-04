@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Linklaget;
 
 /// <summary>
@@ -153,16 +154,18 @@ namespace Transportlaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-		    var recvOk = false;
-
+            int recvSize = 0;
+            var recvOk = false;
+            Console.WriteLine("link layer waiting");
 		    while (!recvOk)
 		    {
-		        var recvSize = link.receive(ref buffer);
+		        recvSize = link.receive(ref buffer);
 		        if (recvSize <= 0) continue;
 		        recvOk = checksum.checkChecksum(buffer, recvSize);
 		        sendAck(recvOk);
 		    }
-		    return 0; 
+            Console.WriteLine("link layer waiting done" + recvSize);
+            return recvSize; 
 		}
 	}
 

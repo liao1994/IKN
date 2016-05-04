@@ -34,6 +34,21 @@ namespace Application
             buf[1] = Convert.ToByte('B');
             buf[2] = Convert.ToByte('C');
             t.send(buf, buf.Length);
+		    var running = true;
+		    while (running)
+		    {
+		        var x = Console.ReadKey();
+		        switch (x.Key)
+		        {
+                    case ConsoleKey.S:
+                        t.send(buf, buf.Length);
+                        Console.WriteLine("sent...");
+                        break;
+                    case ConsoleKey.Q:
+		                running = false;
+		                break;
+		        }
+            }
         }
 
 		/// <summary>
