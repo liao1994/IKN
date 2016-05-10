@@ -103,44 +103,52 @@ namespace Linklaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-            byte b;
+		    try
+		    {
+                byte b;
 
-            do
-            {
-		        b = (byte)serialPort.ReadByte();
-		    } while (b != 'A');
-		    int x = 0;
-		    do
-		    {
-		        b = (byte)serialPort.ReadByte();
-		        buffer[x] = b;
-		        x++;
-		    } while (b !='A');
-		    int y = 0;
-		    for (int i = 0; i < x; i++)
-		    {
-		        if (buffer[i] != END)
-		        {
-		            if (buffer[i] == ESC)
-		            {
-		                switch (buffer[i++])
-		                {
-		                    case ESC_END:
-		                        buf[y] = END;
-		                        break;
-		                    case ESC_ESC:
-		                        buf[y] = ESC;
-		                        break;
-		                }
-		            }
-		            else
-		            {
-                        buf[y] = buffer[i];
+                do
+                {
+                    b = (byte)serialPort.ReadByte();
+                } while (b != 'A');
+                int x = 0;
+                do
+                {
+                    b = (byte)serialPort.ReadByte();
+                    buffer[x] = b;
+                    x++;
+                } while (b != 'A');
+                int y = 0;
+                for (int i = 0; i < x; i++)
+                {
+                    if (buffer[i] != END)
+                    {
+                        if (buffer[i] == ESC)
+                        {
+                            switch (buffer[i++])
+                            {
+                                case ESC_END:
+                                    buf[y] = END;
+                                    break;
+                                case ESC_ESC:
+                                    buf[y] = ESC;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            buf[y] = buffer[i];
+                        }
+                        y++;
                     }
-		            y++;
-		        }
+                }
+                return y;
+            }
+		    catch (Exception)
+		    {
+		        return 0;
 		    }
-		    return y;
+            
 		}
 	}
 }
