@@ -103,12 +103,13 @@ namespace Linklaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-		    var x = serialPort.ReadBufferSize;
-		    var b = new byte[x];
-		    for (int i = 0; i < x; i++)
-		    {
-		    }
-		    var x1 = serialPort.Read(buffer, 0, x);
+		    //var x = serialPort.ReadBufferSize;
+		    //var b = new byte[x];
+		    //for (int i = 0; i < x; i++)
+		    //{
+		    //}
+
+		    var x1 = serialPort.Read(buffer, 0, buf.Length);
 
             Array.Copy(buf, 0, buffer, 1, buf.Length);
             // TO DO Your own code
