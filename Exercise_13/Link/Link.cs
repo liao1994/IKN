@@ -103,47 +103,44 @@ namespace Linklaget
 		/// </param>
 		public int receive (ref byte[] buf)
 		{
-		    //var x = serialPort.ReadBufferSize;
-		    //var b = new byte[x];
-		    //for (int i = 0; i < x; i++)
-		    //{
-		    //}
+            byte b;
 
-		    var x1 = serialPort.Read(buffer, 0, buf.Length);
-
-            Array.Copy(buf, 0, buffer, 1, buf.Length);
-            // TO DO Your own code
-            List<byte> listofbytes = new List<byte>();
-		    if (buf[0] == END && buf[buf.Length] == END)
+            do
+            {
+		        b = (byte)serialPort.ReadByte();
+		    } while (b != 'A');
+		    int x = 0;
+		    do
 		    {
-                for (int i = 1; i < buf.Length-1; i++)
-                {
-                    if (buf[i] == ESC)
-                    {
-                        if (buf[i + 1] == ESC_END)
-                        {
-                            listofbytes.Add(END);
-                        }
-                        if (buf[i + 1] == ESC_ESC)
-                        {
-                            listofbytes.Add(ESC);
-                        }
+		        b = (byte)serialPort.ReadByte();
+		        buffer[x] = b;
+		        x++;
+		    } while (b !='A');
+		    int y = 0;
+		    for (int i = 0; i < x; i++)
+		    {
+		        if (buffer[i] != END)
+		        {
+		            if (buffer[i] == ESC)
+		            {
+		                switch (buffer[i++])
+		                {
+		                    case ESC_END:
+		                        buf[y] = END;
+		                        break;
+		                    case ESC_ESC:
+		                        buf[y] = ESC;
+		                        break;
+		                }
+		            }
+		            else
+		            {
+                        buf[y] = buffer[i];
                     }
-                    
-                }
-            }
-		    if (listofbytes.Count != 0)
-		    {
-                var myByte = new byte[listofbytes.Count];
-                for (int i = 1; i < buf.Length; i++)
-                {
-                    myByte[i] = listofbytes[i];
-                }
-                buf = myByte;
-		        return listofbytes.Count;
+		            y++;
+		        }
 		    }
-
-            return 0; 
+		    return y;
 		}
 	}
 }
