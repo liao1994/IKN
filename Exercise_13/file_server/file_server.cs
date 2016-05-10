@@ -21,13 +21,17 @@ namespace Application
 			// TO DO Your own code
             //Test Application in virtual machine #2 (acts only as receiver for testing Link Layer)
             Transport transport = new Transport(BUFSIZE);
-            byte[] rxBytes = new byte[BUFSIZE];
-            var n = transport.receive(ref rxBytes);
-            for (int x = 0; x < n; x++)
-            {
-                Console.WriteLine(rxBytes[x]);
-            }
-		    Console.ReadKey();
+		    do
+		    {
+		        byte[] rxBytes = new byte[BUFSIZE];
+
+		        var n = transport.receive(ref rxBytes);
+		        for (int x = 0; x < n; x++)
+		        {
+		            Console.WriteLine(rxBytes[x]);
+		        }
+		        Console.ReadKey();
+		    } while (true);
 		}
 
 		/// <summary>
