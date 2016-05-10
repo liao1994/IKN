@@ -28,21 +28,25 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
+
             Transport t = new Transport(BUFSIZE);
             var buf = new byte[BUFSIZE];
             buf[0] = Convert.ToByte('A');
             buf[1] = Convert.ToByte('B');
             buf[2] = Convert.ToByte('C');
+            Console.WriteLine("Starting up...");
+
             t.send(buf, buf.Length);
 		    var running = true;
 		    while (running)
 		    {
+
 		        var x = Console.ReadKey();
 		        switch (x.Key)
 		        {
                     case ConsoleKey.S:
-                        t.send(buf, buf.Length);
                         Console.WriteLine("sent...");
+                        t.send(buf, buf.Length);
                         break;
                     case ConsoleKey.Q:
 		                running = false;
