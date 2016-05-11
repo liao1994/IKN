@@ -96,7 +96,7 @@ namespace Transportlaget
                 (ackType ? buffer[(int) TransCHKSUM.SEQNO] : (byte) (buffer[(int) TransCHKSUM.SEQNO] + 1)%2);
             ackBuf[(int) TransCHKSUM.TYPE] = (int) TransType.ACK;
             checksum.calcChecksum(ref ackBuf, (int) TransSize.ACKSIZE);
-
+            Console.WriteLine("link.send called from T");
             link.send(ackBuf, (int) TransSize.ACKSIZE);
         }
 
@@ -174,18 +174,19 @@ namespace Transportlaget
         {
             var recvSize = 0;
             var recvOk = false;
-            Console.WriteLine("link layer waiting");
+            Console.WriteLine("T waiting");
             while (!recvOk)
             {
-                Console.WriteLine("link layer waiting in while");
+                Console.WriteLine("T waiting in while");
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("link layer recieved something");
+                Console.WriteLine("T recieved something from link");
 
                 if (recvSize <= 0) continue;
                 recvOk = checksum.checkChecksum(buffer, recvSize);
+                Console.WriteLine("T recieved something");
                 sendAck(recvOk);
             }
-            Console.WriteLine("link layer waiting done" + recvSize);
+            Console.WriteLine("T waiting done" + recvSize);
             return recvSize;
         }
     }
