@@ -24,10 +24,13 @@ namespace Transportlaget
         {
             Console.WriteLine("ehm CheckSum should be 123 and 189");
             var buffer = new byte[size - 2];
+            var buffer2 = new byte[size];
             Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer, 0, buffer.Length);
+            Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer2, 2, size);
             Console.WriteLine("something: " + Encoding.ASCII.GetString(buf));
             Console.WriteLine((buf[(int)TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int)TransCHKSUM.CHKSUMLOW]));
             Console.WriteLine(checksum(buffer));
+            Console.WriteLine(checksum(buffer2));
             return checksum(buffer) == (buf[(int) TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int) TransCHKSUM.CHKSUMLOW]);
         }
 
@@ -36,10 +39,8 @@ namespace Transportlaget
             Console.WriteLine("calcCheckSum para info: "+ Encoding.ASCII.GetString(buf) + " " + size);
             var buffer = new byte[size - 2];
 
-            long sum = 0;
-            long sum2;
-            Array.Copy(buf, 2, buffer, 0, buffer.Length);
-            sum = checksum(buffer);
+            Array.Copy(buf, (int)TransSize.CHKSUMSIZE, buffer, 0, size-2);
+            var sum = checksum(buffer);
             Console.WriteLine(Encoding.ASCII.GetString(buffer));
             Console.WriteLine();
 
