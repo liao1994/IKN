@@ -132,7 +132,7 @@ namespace Linklaget
                 x++;
             } while (b != 'A');
             var y = 0;
-            Console.WriteLine(Encoding.ASCII.GetString(buffer));
+            Console.WriteLine(Encoding.ASCII.GetString(buffer) + "checksum from direct serialport" + (int) buf[0] + (int) buf[1]);
             for (var i = 0; i < x; i++)
             {
                 if (buffer[i] != END)
