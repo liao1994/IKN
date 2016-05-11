@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace Transportlaget
 {
@@ -29,13 +30,20 @@ namespace Transportlaget
 
         public void calcChecksum(ref byte[] buf, int size)
         {
+            Console.WriteLine("calcCheckSum para info: "+ Encoding.ASCII.GetString(buf) + " " + size);
+
             var buffer = new byte[size - 2];
             long sum = 0;
-
+            long sum2;
             Array.Copy(buf, 2, buffer, 0, buffer.Length);
             sum = checksum(buffer);
+            Console.WriteLine(Encoding.ASCII.GetString(buffer));
+            Console.WriteLine();
+
             buf[(int) TransCHKSUM.CHKSUMHIGH] = (byte) ((sum >> 8) & 255);
             buf[(int) TransCHKSUM.CHKSUMLOW] = (byte) (sum & 255);
+
+
         }
     }
 }
