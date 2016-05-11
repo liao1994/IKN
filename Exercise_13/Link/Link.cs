@@ -135,25 +135,28 @@ namespace Linklaget
             Console.WriteLine(Encoding.ASCII.GetString(buffer));
             for (var i = 0; i < x; i++)
             {
-                switch (buffer[i])
+                if (buffer[i] != END)
                 {
-                    case END:
-                        continue;
-                    case ESC:
-                        if (buffer[i++] == ESC_END)
-                        {
-                            buf[y] = END;
-                        }
-                        else if (buffer[i++] == ESC_ESC)
-                        {
-                            buf[y] = ESC;
-                        }
-                        break;
-                    default:
-                        buf[y] = buffer[i];
-                        break;
+                    switch (buffer[i])
+                    {
+                        case ESC:
+                            if (buffer[i+1] == ESC_END)
+                            {
+                                buf[y] = END;
+                            }
+                            else if (buffer[i+1] == ESC_ESC)
+                            {
+                                buf[y] = ESC;
+                            }
+                            ++i;
+                            break;
+                        default:
+                            buf[y] = buffer[i];
+                            break;
+                    }
+                    y++;
                 }
-                y++;
+                
             }
             Console.WriteLine("Link Received: " + Encoding.ASCII.GetString(buf));
             return y;
