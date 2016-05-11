@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Transportlaget;
 
@@ -23,11 +24,8 @@ namespace Application
             {
                 var rxBytes = new byte[BUFSIZE];
 
-                var n = transport.receive(ref rxBytes);
-                for (var x = 0; x < n; x++)
-                {
-                    Console.WriteLine(rxBytes[x]);
-                }
+                transport.receive(ref rxBytes);
+                Console.WriteLine(Encoding.ASCII.GetString(rxBytes));
                 Console.ReadKey();
             } while (true);
         }
