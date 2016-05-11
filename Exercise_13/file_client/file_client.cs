@@ -32,6 +32,8 @@ namespace Application
             Console.WriteLine("Starting up...");
 
             t.send(buf, buf.Length);
+            Console.WriteLine("sending...");
+
             var running = true;
             while (running)
             {
