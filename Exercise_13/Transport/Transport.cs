@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using Linklaget;
 
@@ -184,7 +185,7 @@ namespace Transportlaget
             while (!recvOk)
             {
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + recvSize);
+                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + "the size is: "+ recvSize);
 
                 if (recvSize <= 0)
                     recvOk = checksum.checkChecksum(buffer, recvSize);
