@@ -98,7 +98,7 @@ namespace Transportlaget
         {
             Console.WriteLine("Sending ACK after getting Package");
             var ackBuf = new byte[(int) TransSize.ACKSIZE];
-            ackBuf[(int) TransCHKSUM.SEQNO] = (byte)
+            ackBuf[(int) TransCHKSUM.SEQNO] = (byte)    
                 (ackType ? buffer[(int) TransCHKSUM.SEQNO] : (byte) (buffer[(int) TransCHKSUM.SEQNO] + 1)%2);
             ackBuf[(int) TransCHKSUM.TYPE] = (int) TransType.ACK;
             checksum.calcChecksum(ref ackBuf, (int) TransSize.ACKSIZE);
@@ -183,13 +183,12 @@ namespace Transportlaget
             Console.WriteLine("T waiting");
             while (!recvOk)
             {
-                Console.WriteLine("T waiting in while");
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer));
+                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + recvSize);
 
                 if (recvSize <= 0) continue;
                 recvOk = checksum.checkChecksum(buffer, recvSize);
-                Console.WriteLine("T recieved something");
+                Console.WriteLine("T calculating checksum, result: " + recvOk );
                 sendAck(recvOk);
             }
             Console.WriteLine("T waiting done" + recvSize);
