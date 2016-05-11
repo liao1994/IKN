@@ -185,9 +185,9 @@ namespace Transportlaget
             while (!recvOk)
             {
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + "the size is: "+ recvSize);
+                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + "the size is:  "+ recvSize);
 
-                if (recvSize <= 0)
+                if (4 <= recvSize)
                     recvOk = checksum.checkChecksum(buffer, recvSize);
                 Console.WriteLine("T calculating checksum, result: " + recvOk );
                 sendAck(recvOk);
