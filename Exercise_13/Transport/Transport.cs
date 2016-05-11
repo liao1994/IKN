@@ -70,22 +70,15 @@ namespace Transportlaget
         /// </returns>
         private bool receiveAck()
         {
-            Console.WriteLine("T calling link.recieve()");
             var buf = new byte[(int) TransSize.ACKSIZE];
             var size = link.receive(ref buf);
-            if (size != (int) TransSize.ACKSIZE)
-            {
-                Console.WriteLine(this.ToString() + "returned false");
-                return false;
-            }
+            if (size != (int) TransSize.ACKSIZE) return false;
             if (!checksum.checkChecksum(buf, (int) TransSize.ACKSIZE) ||
                 buf[(int) TransCHKSUM.SEQNO] != seqNo ||
                 buf[(int) TransCHKSUM.TYPE] != (int) TransType.ACK)
                 return false;
 
             seqNo = (byte) ((buf[(int) TransCHKSUM.SEQNO] + 1)%2);
-            Console.WriteLine("Return true");
-
             return true;
         }
 
@@ -97,13 +90,11 @@ namespace Transportlaget
         /// </param>
         private void sendAck(bool ackType)
         {
-            Console.WriteLine("Sending ACK after getting Package");
             var ackBuf = new byte[(int) TransSize.ACKSIZE];
             ackBuf[(int) TransCHKSUM.SEQNO] = (byte)    
                 (ackType ? buffer[(int) TransCHKSUM.SEQNO] : (byte) (buffer[(int) TransCHKSUM.SEQNO] + 1)%2);
             ackBuf[(int) TransCHKSUM.TYPE] = (int) TransType.ACK;
             checksum.calcChecksum(ref ackBuf, (int) TransSize.ACKSIZE);
-            Console.WriteLine("link.sendack called from T: "+ Encoding.ASCII.GetString(ackBuf));
             link.send(ackBuf, (int) TransSize.ACKSIZE);
         }
 
@@ -118,26 +109,19 @@ namespace Transportlaget
         /// </param>
         public void send(byte[] buf, int size)
         {
-            Console.WriteLine("Transport Layer Sending package...");
             Array.Copy(buf, 0, buffer, 4, size);
             do
             {
                 buffer[2] = seqNo;
                 buffer[3] = (byte) TransType.DATA;
-                Console.WriteLine("Calculating CheckSum...");
                 checksum.calcChecksum(ref buffer, size + (int) TransSize.ACKSIZE);
-
                 if (++errorCount == 4)
                 {
                     buffer[0]++;
                     //error
                 }
-
-                Console.WriteLine("T calling link.send");
                 link.send(buffer, buffer.Length);
-                Console.WriteLine("T calling link.send ended");
             } while (!receiveAck());
-            Console.WriteLine("T got receiveAck");
             old_seqNo = seqNo;
 
             #region old code
@@ -181,18 +165,16 @@ namespace Transportlaget
         {
             var recvSize = 0;
             var recvOk = false;
-            Console.WriteLine("T waiting");
             while (!recvOk)
             {
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + "the size is:  "+ recvSize);
+                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + "the size is:  "+ recvSize + "and checksum is:" + buffer[0] +"+"+ buffer[1]);
 
-                if (4 <= recvSize)
+                if (3 < recvSize)
                     recvOk = checksum.checkChecksum(buffer, recvSize);
-                Console.WriteLine("T calculating checksum, result: " + recvOk );
                 sendAck(recvOk);
             }
-            Console.WriteLine("T waiting done" + recvSize);
+            Array.Copy(buf,0,buffer,4,buf.Length);
             return recvSize;
         }
     }

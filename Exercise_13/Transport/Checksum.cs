@@ -17,35 +17,23 @@ namespace Transportlaget
                 --length;
             }
 
-            return ~((sum & 0xFFFF) + (sum >> 16)) & 0xFFFF;
+            return (~((sum & 0xFFFF) + (sum >> 16))) & 0xFFFF;
         }
 
         public bool checkChecksum(byte[] buf, int size)
         {
-            Console.WriteLine("ehm CheckSum should be 123 and 189");
             var buffer = new byte[size-2];
-            Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer, 0, size-2);
-            Console.WriteLine("something: " + Encoding.ASCII.GetString(buf));
-            Console.WriteLine(Encoding.ASCII.GetString(buffer) + " and checksum is " + ((buf[(int)TransCHKSUM.CHKSUMHIGH] >> 8) & 255) + " " + (buf[(int)TransCHKSUM.CHKSUMLOW] & 255));
-            Console.WriteLine((buf[(int)TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int)TransCHKSUM.CHKSUMLOW]));
-            Console.WriteLine(checksum(buffer));
+            Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer, 0, buffer.Length);
             return checksum(buffer) == (buf[(int) TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int) TransCHKSUM.CHKSUMLOW]);
         }
 
         public void calcChecksum(ref byte[] buf, int size)
         {
-            Console.WriteLine("calcCheckSum para info: "+ Encoding.ASCII.GetString(buf) + " " + size);
             var buffer = new byte[size - 2];
-
             Array.Copy(buf, (int)TransSize.CHKSUMSIZE, buffer, 0, size-2);
             var sum = checksum(buffer);
-            Console.WriteLine(Encoding.ASCII.GetString(buffer) + " and checksum is " + ((sum >> 8) & 255) + " "+ (sum & 255));
-            Console.WriteLine();
-
             buf[(int) TransCHKSUM.CHKSUMHIGH] = (byte) ((sum >> 8) & 255);
             buf[(int) TransCHKSUM.CHKSUMLOW] = (byte) (sum & 255);
-
-
         }
     }
 }

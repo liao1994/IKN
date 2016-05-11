@@ -64,24 +64,22 @@ namespace Linklaget
         /// </param>
         public void send(byte[] buf, int size)
         {
-            Console.WriteLine("Checksum right b4 SLIP and bytestuffing: " + buf[0] + " and " + buf[1]);
-            var listofbytes = new List<byte>();
-            listofbytes.Add(END);
-            foreach (var element in buf)
+            var listofbytes = new List<byte> {END};
+            for (var i = 0; i < size; i++)
             {
-                if (element == END)
+                switch (buf[i])
                 {
-                    listofbytes.Add(ESC);
-                    listofbytes.Add(ESC_END);
-                }
-                else if (element == ESC)
-                {
-                    listofbytes.Add(ESC);
-                    listofbytes.Add(ESC_ESC);
-                }
-                else
-                {
-                    listofbytes.Add(element);
+                    case END:
+                        listofbytes.Add(ESC);
+                        listofbytes.Add(ESC_END);
+                        break;
+                    case ESC:
+                        listofbytes.Add(ESC);
+                        listofbytes.Add(ESC_ESC);
+                        break;
+                    default:
+                        listofbytes.Add(buf[i]);
+                        break;
                 }
             }
             listofbytes.Add(END);
@@ -90,10 +88,7 @@ namespace Linklaget
             {
                 vbuf[i] = listofbytes[i];
             }
-            Console.WriteLine("Link Writing to SerialPort" + Encoding.ASCII.GetString(vbuf));
-            Console.WriteLine("checksum right before sending out to serialport:" + (int)vbuf[1] + " and " + (int)vbuf[2]);
             serialPort.WriteLine(Encoding.ASCII.GetString(vbuf)); // TO DO Your own code
-
         }
 
         /// <summary>
@@ -116,7 +111,8 @@ namespace Linklaget
                 }
                 catch (Exception)
                 {
-                    b = 0;
+                    Console.WriteLine("Timed Out data loss might occurer");
+                    b = 0xFF;
                 }
             } while (b != 'A');
             var x = 0;
@@ -125,16 +121,17 @@ namespace Linklaget
                 try
                 {
                     b = (byte) serialPort.ReadByte();
+                    buffer[x] = b;
+                    x++;
                 }
                 catch (Exception)
                 {
-                    b = 0;
+                    Console.WriteLine("Timed Out data loss might occurer");
+                    b = 0xFF;
                 }
-                buffer[x] = b;
-                x++;
             } while (b != 'A');
             var y = 0;
-            Console.WriteLine(Encoding.ASCII.GetString(buffer) + "checksum from direct serialport" + (int) buf[0] +"and"+ (int) buf[1]);
+            Console.WriteLine(Encoding.ASCII.GetString(buffer) + "checksum from direct serialport before bytestuuff" + (int)buffer[1] +"and"+ (int)buffer[2]);
             for (var i = 0; i < x; i++)
             {
                 if (buffer[i] != END)
@@ -150,7 +147,7 @@ namespace Linklaget
                             {
                                 buf[y] = ESC;
                             }
-                            ++i;
+                            i++;
                             break;
                         default:
                             buf[y] = buffer[i];
@@ -158,9 +155,9 @@ namespace Linklaget
                     }
                     y++;
                 }
-                
+                //end travel
             }
-            Console.WriteLine("Link Received: " + Encoding.ASCII.GetString(buf));
+            Console.WriteLine("Link Received: " + Encoding.ASCII.GetString(buf)+ "... checksum after ANTI SLIP...:"+buf[0] + buf[1]);
             return y;
         }
     }
