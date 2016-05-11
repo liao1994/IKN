@@ -159,7 +159,6 @@ namespace Linklaget
                 }
                 //end travel
             }
-            Console.WriteLine("Link Received: " + Encoding.ASCII.GetString(buf)+ "... checksum after ANTI SLIP...:"+buf[0] + buf[1]);
             return y;
         }
     }
