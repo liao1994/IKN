@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO.Ports;
 using System.Text;
 
@@ -111,13 +112,15 @@ namespace Linklaget
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Timed Out data loss might occurer");
+                    Console.Clear();
+                    Console.WriteLine("Finding connection...");
                     b = 0xFF;
                 }
             } while (b != 'A');
             var x = 0;
             do
             {
+                Retry:
                 try
                 {
                     b = (byte) serialPort.ReadByte();
@@ -127,11 +130,10 @@ namespace Linklaget
                 catch (Exception)
                 {
                     Console.WriteLine("Timed Out data loss might occurer");
-                    b = 0xFF;
+                    goto Retry;
                 }
             } while (b != 'A');
             var y = 0;
-            Console.WriteLine(Encoding.ASCII.GetString(buffer) + "checksum from direct serialport before bytestuuff" + (int)buffer[1] +"and"+ (int)buffer[2]);
             for (var i = 0; i < x; i++)
             {
                 if (buffer[i] != END)
