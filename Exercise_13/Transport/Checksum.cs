@@ -26,7 +26,7 @@ namespace Transportlaget
             var buffer = new byte[size - 2];
             var buffer2 = new byte[size];
             Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer, 0, buffer.Length);
-            Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer2, 2, size);
+            Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer2, 2, size-2);
             Console.WriteLine("something: " + Encoding.ASCII.GetString(buf));
             Console.WriteLine((buf[(int)TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int)TransCHKSUM.CHKSUMLOW]));
             Console.WriteLine(checksum(buffer));
