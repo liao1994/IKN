@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Transportlaget;
 
 namespace Application
@@ -57,6 +58,11 @@ namespace Application
         public static void Main(string[] args)
         {
             new file_server();
+        }
+
+        public static void Display()
+        {
+            Console.WriteLine(".");
         }
     }
 }

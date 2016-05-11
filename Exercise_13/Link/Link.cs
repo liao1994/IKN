@@ -106,28 +106,25 @@ namespace Linklaget
             byte b;
             do
             {
-                OnYourHorseAgain:
                 try
                 {
                     b = (byte) serialPort.ReadByte();
                 }
                 catch (Exception)
                 {
-                    goto
-                        OnYourHorseAgain;
+                    b = 0;
                 }
             } while (b != 'A');
             var x = 0;
             do
             {
-                tryAgain:
                 try
                 {
                     b = (byte) serialPort.ReadByte();
                 }
                 catch (Exception)
                 {
-                    goto tryAgain;
+                    b = 0;
                 }
                 buffer[x] = b;
                 x++;
