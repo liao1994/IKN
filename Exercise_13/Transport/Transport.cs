@@ -109,17 +109,22 @@ namespace Transportlaget
         /// </param>
         public void send(byte[] buf, int size)
         {
+            Console.WriteLine("Transport Layer Sending package...");
             Array.Copy(buf, 0, buffer, 4, size);
             do
             {
                 buffer[2] = seqNo;
                 buffer[3] = (byte) TransType.DATA;
+                Console.WriteLine("Calculating CheckSum...");
                 checksum.calcChecksum(ref buffer, size + (int) TransSize.ACKSIZE);
+
                 if (++errorCount == 4)
                 {
                     buffer[0]++;
                     //error
                 }
+
+                Console.WriteLine("T calling link.send");
                 link.send(buffer, buffer.Length);
             } while (!receiveAck());
             old_seqNo = DEFAULT_SEQNO;
