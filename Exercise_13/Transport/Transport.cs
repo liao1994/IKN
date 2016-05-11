@@ -168,8 +168,6 @@ namespace Transportlaget
             while (!recvOk)
             {
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer) + "the size is:  "+ recvSize + "and checksum is:" + buffer[0] +"+"+ buffer[1]);
-
                 if (3 < recvSize)
                     recvOk = checksum.checkChecksum(buffer, recvSize);
                 sendAck(recvOk);
