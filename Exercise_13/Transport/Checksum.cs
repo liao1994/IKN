@@ -38,7 +38,7 @@ namespace Transportlaget
 
             Array.Copy(buf, (int)TransSize.CHKSUMSIZE, buffer, 0, size-2);
             var sum = checksum(buffer);
-            Console.WriteLine(Encoding.ASCII.GetString(buffer) + " and checksum is " + (char) buf[0] + " "+ (char)buf[1]);
+            Console.WriteLine(Encoding.ASCII.GetString(buffer) + " and checksum is " + ((sum >> 8) & 255) + " "+ (sum & 255));
             Console.WriteLine();
 
             buf[(int) TransCHKSUM.CHKSUMHIGH] = (byte) ((sum >> 8) & 255);
