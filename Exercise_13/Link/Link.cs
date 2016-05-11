@@ -89,7 +89,7 @@ namespace Linklaget
             {
                 vbuf[i] = listofbytes[i];
             }
-            serialPort.WriteLine(Encoding.ASCII.GetString(vbuf)); // TO DO Your own code
+            serialPort.Write(vbuf,0,vbuf.Length); // TO DO Your own code
         }
 
         /// <summary>
