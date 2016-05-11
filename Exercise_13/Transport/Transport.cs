@@ -72,7 +72,11 @@ namespace Transportlaget
             Console.WriteLine("T calling link.recieve()");
             var buf = new byte[(int) TransSize.ACKSIZE];
             var size = link.receive(ref buf);
-            if (size != (int) TransSize.ACKSIZE) return false;
+            if (size != (int) TransSize.ACKSIZE)
+            {
+                Console.WriteLine(this.ToString() + "returned false");
+                return false;
+            }
             if (!checksum.checkChecksum(buf, (int) TransSize.ACKSIZE) ||
                 buf[(int) TransCHKSUM.SEQNO] != seqNo ||
                 buf[(int) TransCHKSUM.TYPE] != (int) TransType.ACK)
