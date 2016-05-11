@@ -102,7 +102,7 @@ namespace Transportlaget
                 (ackType ? buffer[(int) TransCHKSUM.SEQNO] : (byte) (buffer[(int) TransCHKSUM.SEQNO] + 1)%2);
             ackBuf[(int) TransCHKSUM.TYPE] = (int) TransType.ACK;
             checksum.calcChecksum(ref ackBuf, (int) TransSize.ACKSIZE);
-            Console.WriteLine("link.sendack called from T: "+ ackBuf);
+            Console.WriteLine("link.sendack called from T: "+ Encoding.ASCII.GetString(ackBuf));
             link.send(ackBuf, (int) TransSize.ACKSIZE);
         }
 
