@@ -154,6 +154,7 @@ namespace Linklaget
                 }
                 y++;
             }
+            Console.WriteLine("Received: " + Encoding.ASCII.GetString(buf));
             return y;
         }
     }
