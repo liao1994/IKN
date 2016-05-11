@@ -174,7 +174,7 @@ namespace Transportlaget
                     recvOk = checksum.checkChecksum(buffer, recvSize);
                 sendAck(recvOk);
             }
-            Array.Copy(buf,0,buffer,4,buf.Length);
+            Array.Copy(buf,4,buffer,0,buf.Length);
             return recvSize;
         }
     }
