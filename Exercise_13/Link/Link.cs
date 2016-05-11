@@ -88,8 +88,9 @@ namespace Linklaget
             {
                 vbuf[i] = listofbytes[i];
             }
-            Console.WriteLine("Link Writing to SerialPort");
+            Console.WriteLine("Link Writing to SerialPort" + Convert.ToString(vbuf));
             serialPort.WriteLine(Convert.ToString(vbuf)); // TO DO Your own code
+
         }
 
         /// <summary>
