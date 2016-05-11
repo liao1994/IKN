@@ -1,154 +1,161 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Link.
 /// </summary>
+
 namespace Linklaget
 {
-	/// <summary>
-	/// Link.
-	/// </summary>
-	public class Link
-	{
-		/// <summary>
-		/// The DELIMITE for slip protocol.
-		/// </summary>
-		const byte DELIMITER = (byte)'A';
+    /// <summary>
+    ///     Link.
+    /// </summary>
+    public class Link
+    {
+        /// <summary>
+        ///     The DELIMITE for slip protocol.
+        /// </summary>
+        private const byte DELIMITER = (byte) 'A';
 
-	    const byte END = (byte) 'A';
-	    const byte ESC = (byte) 'B';
-        const byte ESC_END = (byte) 'C';
-        const byte ESC_ESC = (byte) 'D';
-		/// <summary>
-		/// The buffer for link.
-		/// </summary>
-		private byte[] buffer;
-		/// <summary>
-		/// The serial port.
-		/// </summary>
-		SerialPort serialPort;
+        private const byte END = (byte) 'A';
+        private const byte ESC = (byte) 'B';
+        private const byte ESC_END = (byte) 'C';
+        private const byte ESC_ESC = (byte) 'D';
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="link"/> class.
-		/// </summary>
-		public Link (int BUFSIZE)
-		{
-			// Create a new SerialPort object with default settings.
-			serialPort = new SerialPort("/dev/ttyS1",115200,Parity.None,8,StopBits.One);
+        /// <summary>
+        ///     The buffer for link.
+        /// </summary>
+        private readonly byte[] buffer;
 
-			if(!serialPort.IsOpen)
-				serialPort.Open();
+        /// <summary>
+        ///     The serial port.
+        /// </summary>
+        private readonly SerialPort serialPort;
 
-			buffer = new byte[(BUFSIZE*2)];
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="link" /> class.
+        /// </summary>
+        public Link(int BUFSIZE)
+        {
+            // Create a new SerialPort object with default settings.
+            serialPort = new SerialPort("/dev/ttyS1", 115200, Parity.None, 8, StopBits.One);
 
-			serialPort.ReadTimeout = 200;
-			serialPort.WriteTimeout = 200;
-			serialPort.DiscardInBuffer ();
-			serialPort.DiscardOutBuffer ();
-		}
+            if (!serialPort.IsOpen)
+                serialPort.Open();
 
-		/// <summary>
-		/// Send the specified buf and size.
-		/// </summary>
-		/// <param name='buf'>
-		/// Buffer.
-		/// </param>
-		/// <param name='size'>
-		/// Size.
-		/// </param>
-		public void send (byte[] buf, int size)
-		{
-            
-            List<byte> listofbytes = new List<byte>();
+            buffer = new byte[BUFSIZE*2];
+
+            serialPort.ReadTimeout = 200;
+            serialPort.WriteTimeout = 200;
+            serialPort.DiscardInBuffer();
+            serialPort.DiscardOutBuffer();
+        }
+
+        /// <summary>
+        ///     Send the specified buf and size.
+        /// </summary>
+        /// <param name='buf'>
+        ///     Buffer.
+        /// </param>
+        /// <param name='size'>
+        ///     Size.
+        /// </param>
+        public void send(byte[] buf, int size)
+        {
+            var listofbytes = new List<byte>();
             listofbytes.Add(END);
-		    foreach (var element in buf)
-		    {
-		        if (element == END)
-		        {
-		            listofbytes.Add(ESC);
-		            listofbytes.Add(ESC_END);
-		        }
-		        else if (element == ESC)
-		        {
-		            listofbytes.Add(ESC);
-		            listofbytes.Add(ESC_ESC);
-		        }
-		        else
-		        {
+            foreach (var element in buf)
+            {
+                if (element == END)
+                {
+                    listofbytes.Add(ESC);
+                    listofbytes.Add(ESC_END);
+                }
+                else if (element == ESC)
+                {
+                    listofbytes.Add(ESC);
+                    listofbytes.Add(ESC_ESC);
+                }
+                else
+                {
                     listofbytes.Add(element);
-		        }
-		    }
+                }
+            }
             listofbytes.Add(END);
             var vbuf = new byte[listofbytes.Count];
-		    for (var i = 0; i < listofbytes.Count; i++)
-		    {
+            for (var i = 0; i < listofbytes.Count; i++)
+            {
                 vbuf[i] = listofbytes[i];
             }
 
-			serialPort.WriteLine(Convert.ToString(vbuf));// TO DO Your own code
-
+            serialPort.WriteLine(Convert.ToString(vbuf)); // TO DO Your own code
         }
 
-		/// <summary>
-		/// Receive the specified buf and size.
-		/// </summary>
-		/// <param name='buf'>
-		/// Buffer.
-		/// </param>
-		/// <param name='size'>
-		/// Size.
-		/// </param>
-		public int receive (ref byte[] buf)
-		{
-		    try
-		    {
-                byte b;
-
-                do
+        /// <summary>
+        ///     Receive the specified buf and size.
+        /// </summary>
+        /// <param name='buf'>
+        ///     Buffer.
+        /// </param>
+        /// <param name='size'>
+        ///     Size.
+        /// </param>
+        public int receive(ref byte[] buf)
+        {
+            byte b;
+            do
+            {
+                OnYourHorseAgain:
+                try
                 {
-                    b = (byte)serialPort.ReadByte();
-                } while (b != 'A');
-                int x = 0;
-                do
-                {
-                    b = (byte)serialPort.ReadByte();
-                    buffer[x] = b;
-                    x++;
-                } while (b != 'A');
-                int y = 0;
-                for (int i = 0; i < x; i++)
-                {
-                    if (buffer[i] != END)
-                    {
-                        if (buffer[i] == ESC)
-                        {
-                            switch (buffer[i++])
-                            {
-                                case ESC_END:
-                                    buf[y] = END;
-                                    break;
-                                case ESC_ESC:
-                                    buf[y] = ESC;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            buf[y] = buffer[i];
-                        }
-                        y++;
-                    }
+                    b = (byte) serialPort.ReadByte();
                 }
-                return y;
+                catch (Exception)
+                {
+                    goto
+                        OnYourHorseAgain;
+                }
+            } while (b != 'A');
+            var x = 0;
+            do
+            {
+                tryAgain:
+                try
+                {
+                    b = (byte) serialPort.ReadByte();
+                }
+                catch (Exception)
+                {
+                    goto tryAgain;
+                }
+                buffer[x] = b;
+                x++;
+            } while (b != 'A');
+            var y = 0;
+            for (var i = 0; i < x; i++)
+            {
+                switch (buffer[i])
+                {
+                    case END:
+                        continue;
+                    case ESC:
+                        if (buffer[i++] == ESC_END)
+                        {
+                            buf[y] = END;
+                        }
+                        else if (buffer[i++] == ESC_ESC)
+                        {
+                            buf[y] = ESC;
+                        }
+                        break;
+                    default:
+                        buf[y] = buffer[i];
+                        break;
+                }
+                y++;
             }
-		    catch (Exception)
-		    {
-		        return 0;
-		    }
-            
-		}
-	}
+            return y;
+        }
+    }
 }
