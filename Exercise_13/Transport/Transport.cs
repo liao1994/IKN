@@ -168,8 +168,10 @@ namespace Transportlaget
             Console.WriteLine("link layer waiting");
             while (!recvOk)
             {
-                recvSize = link.receive(ref buffer);
                 Console.WriteLine("link layer waiting in while");
+                recvSize = link.receive(ref buffer);
+                Console.WriteLine("link layer recieved something");
+
                 if (recvSize <= 0) continue;
                 recvOk = checksum.checkChecksum(buffer, recvSize);
                 sendAck(recvOk);
