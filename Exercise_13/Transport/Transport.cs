@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Linklaget;
 
 /// <summary>
@@ -179,7 +180,7 @@ namespace Transportlaget
             {
                 Console.WriteLine("T waiting in while");
                 recvSize = link.receive(ref buffer);
-                Console.WriteLine("T recieved something from link");
+                Console.WriteLine("T recieved something from link: " + Encoding.ASCII.GetString(buffer));
 
                 if (recvSize <= 0) continue;
                 recvOk = checksum.checkChecksum(buffer, recvSize);
