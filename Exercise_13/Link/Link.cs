@@ -129,6 +129,7 @@ namespace Linklaget
                     b = 0;
                 }
                 buffer[x] = b;
+                Console.WriteLine(Encoding.ASCII.GetString(buffer));
                 x++;
             } while (b != 'A');
             var y = 0;
