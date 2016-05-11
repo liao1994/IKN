@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Text;
 
 /// <summary>
 /// Link.
@@ -88,8 +89,8 @@ namespace Linklaget
             {
                 vbuf[i] = listofbytes[i];
             }
-            Console.WriteLine("Link Writing to SerialPort" + Convert.ToString(vbuf));
-            serialPort.WriteLine(Convert.ToString(vbuf)); // TO DO Your own code
+            Console.WriteLine("Link Writing to SerialPort" + Encoding.ASCII.GetString(vbuf));
+            serialPort.WriteLine(Encoding.ASCII.GetString(vbuf)); // TO DO Your own code
 
         }
 

@@ -68,6 +68,7 @@ namespace Transportlaget
         /// </returns>
         private bool receiveAck()
         {
+            Console.WriteLine("T calling link.recieve()");
             var buf = new byte[(int) TransSize.ACKSIZE];
             var size = link.receive(ref buf);
             if (size != (int) TransSize.ACKSIZE) return false;
@@ -77,6 +78,7 @@ namespace Transportlaget
                 return false;
 
             seqNo = (byte) ((buf[(int) TransCHKSUM.SEQNO] + 1)%2);
+            Console.WriteLine("Return true");
 
             return true;
         }
