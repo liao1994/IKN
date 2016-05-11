@@ -137,7 +137,7 @@ namespace Transportlaget
                 Console.WriteLine("T calling link.send ended");
             } while (!receiveAck());
             Console.WriteLine("T got receiveAck");
-            old_seqNo = DEFAULT_SEQNO;
+            old_seqNo = seqNo;
 
             #region old code
 
