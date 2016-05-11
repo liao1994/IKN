@@ -96,6 +96,7 @@ namespace Transportlaget
         /// </param>
         private void sendAck(bool ackType)
         {
+            Console.WriteLine("Sending ACK after getting Package");
             var ackBuf = new byte[(int) TransSize.ACKSIZE];
             ackBuf[(int) TransCHKSUM.SEQNO] = (byte)
                 (ackType ? buffer[(int) TransCHKSUM.SEQNO] : (byte) (buffer[(int) TransCHKSUM.SEQNO] + 1)%2);
