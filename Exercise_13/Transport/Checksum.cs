@@ -22,17 +22,19 @@ namespace Transportlaget
 
         public bool checkChecksum(byte[] buf, int size)
         {
+            Console.WriteLine("ehm CheckSum should be 123 and 189");
             var buffer = new byte[size - 2];
-
             Array.Copy(buf, (int) TransSize.CHKSUMSIZE, buffer, 0, buffer.Length);
+            Console.WriteLine((buf[(int)TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int)TransCHKSUM.CHKSUMLOW]));
+            Console.WriteLine(checksum(buffer));
             return checksum(buffer) == (buf[(int) TransCHKSUM.CHKSUMHIGH] << 8 | buf[(int) TransCHKSUM.CHKSUMLOW]);
         }
 
         public void calcChecksum(ref byte[] buf, int size)
         {
             Console.WriteLine("calcCheckSum para info: "+ Encoding.ASCII.GetString(buf) + " " + size);
-
             var buffer = new byte[size - 2];
+
             long sum = 0;
             long sum2;
             Array.Copy(buf, 2, buffer, 0, buffer.Length);
