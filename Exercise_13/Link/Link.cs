@@ -64,6 +64,7 @@ namespace Linklaget
         /// </param>
         public void send(byte[] buf, int size)
         {
+            Console.WriteLine("Checksum right b4 SLIP and bytestuffing: " + buf[0] + " and " + buf[1]);
             var listofbytes = new List<byte>();
             listofbytes.Add(END);
             foreach (var element in buf)
@@ -90,6 +91,7 @@ namespace Linklaget
                 vbuf[i] = listofbytes[i];
             }
             Console.WriteLine("Link Writing to SerialPort" + Encoding.ASCII.GetString(vbuf));
+            Console.WriteLine("checksum right before sending out to serialport:" + (int)vbuf[1] + " and " + (int)vbuf[2]);
             serialPort.WriteLine(Encoding.ASCII.GetString(vbuf)); // TO DO Your own code
 
         }
@@ -132,7 +134,7 @@ namespace Linklaget
                 x++;
             } while (b != 'A');
             var y = 0;
-            Console.WriteLine(Encoding.ASCII.GetString(buffer) + "checksum from direct serialport" + (int) buf[0] + (int) buf[1]);
+            Console.WriteLine(Encoding.ASCII.GetString(buffer) + "checksum from direct serialport" + (int) buf[0] +"and"+ (int) buf[1]);
             for (var i = 0; i < x; i++)
             {
                 if (buffer[i] != END)
