@@ -168,12 +168,12 @@ namespace Transportlaget
             while (!recvOk)
             {
                 recvSize = link.receive(ref buffer);
-                if (3 < recvSize)
+                if (5 < recvSize)
                     recvOk = checksum.checkChecksum(buffer, recvSize);
                 sendAck(recvOk);
             }
-            Array.Copy(buffer,4,buf,0,recvSize);
-            return recvSize;
+            Array.Copy(buffer,4,buf,0, recvSize-4);
+            return recvSize - 4;
         }
     }
 }
